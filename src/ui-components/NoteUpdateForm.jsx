@@ -68,7 +68,7 @@ export default function NoteUpdateForm(props) {
     name: [{ type: "Required" }],
     description: [],
     image: [],
-    submittedBy: [{ type: "Required" }],
+    submittedBy: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -99,7 +99,7 @@ export default function NoteUpdateForm(props) {
           name,
           description: description ?? null,
           image: image ?? null,
-          submittedBy,
+          submittedBy: submittedBy ?? null,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -234,7 +234,7 @@ export default function NoteUpdateForm(props) {
       ></TextField>
       <TextField
         label="Submitted by"
-        isRequired={true}
+        isRequired={false}
         isReadOnly={false}
         value={submittedBy}
         onChange={(e) => {

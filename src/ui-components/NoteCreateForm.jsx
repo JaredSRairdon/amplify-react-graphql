@@ -47,7 +47,7 @@ export default function NoteCreateForm(props) {
     name: [{ type: "Required" }],
     description: [],
     image: [],
-    submittedBy: [{ type: "Required" }],
+    submittedBy: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -215,7 +215,7 @@ export default function NoteCreateForm(props) {
       ></TextField>
       <TextField
         label="Submitted by"
-        isRequired={true}
+        isRequired={false}
         isReadOnly={false}
         value={submittedBy}
         onChange={(e) => {

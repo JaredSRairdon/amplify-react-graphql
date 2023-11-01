@@ -125,7 +125,7 @@ const App = ({ signOut }) => {
                 style={{ width: 400 }}
               />
             )}
-            <Text as="span"><label>submitted by</label>{note.submittedBy}</Text>
+            <Text as="span">{note.submittedBy}</Text>
             <Button variation="link" onClick={() => deleteNote(note)}>
               Delete note
             </Button>
