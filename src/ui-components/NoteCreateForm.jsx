@@ -25,23 +25,29 @@ export default function NoteCreateForm(props) {
     name: "",
     description: "",
     image: "",
+    submittedBy: "",
   };
   const [name, setName] = React.useState(initialValues.name);
   const [description, setDescription] = React.useState(
     initialValues.description
   );
   const [image, setImage] = React.useState(initialValues.image);
+  const [submittedBy, setSubmittedBy] = React.useState(
+    initialValues.submittedBy
+  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setName(initialValues.name);
     setDescription(initialValues.description);
     setImage(initialValues.image);
+    setSubmittedBy(initialValues.submittedBy);
     setErrors({});
   };
   const validations = {
     name: [{ type: "Required" }],
     description: [],
     image: [],
+    submittedBy: [{ type: "Required" }],
   };
   const runValidationTasks = async (
     fieldName,
@@ -72,6 +78,7 @@ export default function NoteCreateForm(props) {
           name,
           description,
           image,
+          submittedBy,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -137,6 +144,7 @@ export default function NoteCreateForm(props) {
               name: value,
               description,
               image,
+              submittedBy,
             };
             const result = onChange(modelFields);
             value = result?.name ?? value;
@@ -163,6 +171,7 @@ export default function NoteCreateForm(props) {
               name,
               description: value,
               image,
+              submittedBy,
             };
             const result = onChange(modelFields);
             value = result?.description ?? value;
@@ -189,6 +198,7 @@ export default function NoteCreateForm(props) {
               name,
               description,
               image: value,
+              submittedBy,
             };
             const result = onChange(modelFields);
             value = result?.image ?? value;
@@ -202,6 +212,33 @@ export default function NoteCreateForm(props) {
         errorMessage={errors.image?.errorMessage}
         hasError={errors.image?.hasError}
         {...getOverrideProps(overrides, "image")}
+      ></TextField>
+      <TextField
+        label="Submitted by"
+        isRequired={true}
+        isReadOnly={false}
+        value={submittedBy}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name,
+              description,
+              image,
+              submittedBy: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.submittedBy ?? value;
+          }
+          if (errors.submittedBy?.hasError) {
+            runValidationTasks("submittedBy", value);
+          }
+          setSubmittedBy(value);
+        }}
+        onBlur={() => runValidationTasks("submittedBy", submittedBy)}
+        errorMessage={errors.submittedBy?.errorMessage}
+        hasError={errors.submittedBy?.hasError}
+        {...getOverrideProps(overrides, "submittedBy")}
       ></TextField>
       <Flex
         justifyContent="space-between"

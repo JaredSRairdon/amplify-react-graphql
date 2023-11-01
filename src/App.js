@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
 import "@aws-amplify/ui-react/styles.css";
-import { API, Storage } from 'aws-amplify';
+import { API, Storage, Auth } from 'aws-amplify';
 import {
   Button,
   Flex,
@@ -45,10 +45,14 @@ const App = ({ signOut }) => {
     event.preventDefault();
     const form = new FormData(event.target);
     const image = form.get("image");
+    const currentAuthenticatedUser = await Auth.currentAuthenticatedUser();
+    const username = currentAuthenticatedUser.username;
+    console.log(username)
     const data = {
       name: form.get("name"),
       description: form.get("description"),
       image: image.name,
+      submittedBy: username
     };
     if (!!data.image) await Storage.put(data.name, image);
     await API.graphql({
@@ -59,7 +63,6 @@ const App = ({ signOut }) => {
     event.target.reset();
   }
   
-
   async function deleteNote({ id, name }) {
     const newNotes = notes.filter((note) => note.id !== id);
     setNotes(newNotes);
@@ -122,6 +125,7 @@ const App = ({ signOut }) => {
                 style={{ width: 400 }}
               />
             )}
+            <Text as="span"><label>submitted by</label>{note.submittedBy}</Text>
             <Button variation="link" onClick={() => deleteNote(note)}>
               Delete note
             </Button>
